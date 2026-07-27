@@ -106,13 +106,16 @@
 
       <div class="relative min-h-[calc(100vh-100px)] bg-white pb-16">
         <!-- filter row -->
-        <div class="flex items-center justify-between px-5 pb-4 pt-4">
-          <div class="flex items-center gap-2">
-            <select id="instanceFilter" class="w-40 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-f-gray focus:outline-none">
+        <div class="flex flex-wrap items-center justify-between gap-3 px-5 pb-4 pt-4">
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="typeFilter" class="w-48 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-f-gray focus:outline-none">
+              <option value="">All Action Types</option>
+            </select>
+            <select id="variantFilter" class="w-44 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-f-gray focus:outline-none">
+              <option value="">All Variants</option>
+            </select>
+            <select id="instanceFilter" class="w-48 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-f-gray focus:outline-none">
               <option value="">All Instances</option>
-              <option>Line-A Cap Inspection</option>
-              <option>Line-B Weld Bead</option>
-              <option>Line-C Assembly</option>
             </select>
             <select id="sourceFilter" class="w-52 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-f-gray focus:outline-none">
               <option value="">All Sources</option>
@@ -120,6 +123,7 @@
               <option value="Internal Action Config">Internal Action Config</option>
               <option value="Dashboard">Dashboard</option>
             </select>
+            <button id="clearBtn" class="rounded-md px-3 py-2 text-sm font-medium text-f-primary hover:underline">Clear filters</button>
           </div>
           <div class="flex items-center gap-2">
             <span class="text-sm text-f-dark-gray">Total actions: <span id="countBadge" class="font-medium text-f-gray">0</span></span>
@@ -132,11 +136,14 @@
             <table class="min-w-full divide-y divide-gray-300" style="table-layout:auto">
               <thead class="sticky top-0 z-10">
                 <tr class="relative bg-f-primary">
-                  <th class="px-2 py-4 text-center text-base font-medium text-white">Action Name</th>
-                  <th class="px-2 py-4 text-center text-base font-medium text-white">Variant</th>
-                  <th class="px-2 py-4 text-center text-base font-medium text-white">Source</th>
-                  <th class="px-2 py-4 text-center text-base font-medium text-white">Condition</th>
-                  <th class="px-2 py-4 text-center text-base font-medium text-white">View Action</th>
+                  <th class="whitespace-nowrap px-3 py-4 text-center text-base font-medium text-white">Action Name</th>
+                  <th class="whitespace-nowrap px-3 py-4 text-center text-base font-medium text-white">Action Type</th>
+                  <th class="whitespace-nowrap px-3 py-4 text-center text-base font-medium text-white">Variant</th>
+                  <th class="whitespace-nowrap px-3 py-4 text-center text-base font-medium text-white">Instance</th>
+                  <th class="whitespace-nowrap px-3 py-4 text-center text-base font-medium text-white">Source</th>
+                  <th class="whitespace-nowrap px-3 py-4 text-center text-base font-medium text-white">Condition</th>
+                  <th class="whitespace-nowrap px-3 py-4 text-center text-base font-medium text-white">Created Date</th>
+                  <th class="whitespace-nowrap px-3 py-4 text-center text-base font-medium text-white">View Action</th>
                 </tr>
               </thead>
               <tbody id="tbody" class="divide-y divide-gray-200 bg-white"></tbody>
@@ -149,21 +156,21 @@
 
   <script>
     const rows = [
-      { action: 'Trigger Image',        variant: 'Variant 1 - Front',  source: 'PLC Read Config',        condition: 'Register 100 == 1' },
-      { action: 'Change Variant',       variant: 'Variant 2 - Rear',   source: 'PLC Read Config',        condition: 'Register 104 == 2' },
-      { action: 'Write To PLC',         variant: 'Variant 1 - Front',  source: 'PLC Read Config',        condition: 'Coil 12 == True' },
-      { action: 'Change Ground Truth',  variant: 'Variant 3 - Side',   source: 'PLC Read Config',        condition: 'Register 210 > 50' },
-      { action: 'Write To DB',          variant: 'Variant 1 - Front',  source: 'PLC Read Config',        condition: 'Register 100 == 1' },
-      { action: 'Trigger Image',        variant: 'Variant 2 - Rear',   source: 'Internal Action Config', condition: 'Verdict == NG' },
-      { action: 'Change Ground Truth',  variant: 'Variant 2 - Rear',   source: 'Internal Action Config', condition: 'Defect Count >= 3' },
-      { action: 'Write To DB',          variant: 'Variant 3 - Side',   source: 'Internal Action Config', condition: 'Verdict == OK' },
-      { action: 'Reverse Judgement',    variant: 'Variant 1 - Front',  source: 'Internal Action Config', condition: 'Operator Override == True' },
-      { action: 'Clear Captures',       variant: 'Variant 2 - Rear',   source: 'Internal Action Config', condition: 'Cycle End == True' },
-      { action: 'Trigger Image',        variant: 'Variant 1 - Front',  source: 'Dashboard',              condition: 'Button: Capture Now' },
-      { action: 'Write To PLC',         variant: 'Variant 2 - Rear',   source: 'Dashboard',              condition: 'Button: Accept Part' },
-      { action: 'Change Variant',       variant: 'Variant 3 - Side',   source: 'Dashboard',              condition: 'Dropdown: Select Variant' },
-      { action: 'Dashboard Refresh',    variant: '—',                  source: 'Dashboard',              condition: 'Button: Refresh View' },
-      { action: 'Open Popup',           variant: '—',                  source: 'Dashboard',              condition: 'Button: Show Details' },
+      { name: 'Capture front on trigger', type: 'Trigger Image',       variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 100 == 1',        created: '12 Jun 2026, 10:24' },
+      { name: 'Switch to rear recipe',    type: 'Change Variant',       variant: 'Variant 2 - Rear',  instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 104 == 2',        created: '12 Jun 2026, 10:31' },
+      { name: 'Ack to PLC coil',          type: 'Write To PLC',         variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Coil 12 == True',          created: '14 Jun 2026, 09:05' },
+      { name: 'Update side GT',           type: 'Change Ground Truth',  variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'PLC Read Config',        condition: 'Register 210 > 50',        created: '15 Jun 2026, 16:42' },
+      { name: 'Log read to DB',           type: 'Write To DB',          variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 100 == 1',        created: '15 Jun 2026, 16:50' },
+      { name: 'Retrigger on NG',          type: 'Trigger Image',        variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Verdict == NG',            created: '18 Jun 2026, 11:12' },
+      { name: 'Bump GT on defects',       type: 'Change Ground Truth',  variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Defect Count >= 3',        created: '18 Jun 2026, 11:20' },
+      { name: 'Persist OK result',        type: 'Write To DB',          variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'Internal Action Config', condition: 'Verdict == OK',            created: '19 Jun 2026, 08:33' },
+      { name: 'Operator override flip',   type: 'Reverse Judgement',    variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'Internal Action Config', condition: 'Operator Override == True',created: '20 Jun 2026, 14:07' },
+      { name: 'Flush captures on end',    type: 'Clear Captures',       variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Cycle End == True',        created: '20 Jun 2026, 14:15' },
+      { name: 'Manual capture button',    type: 'Trigger Image',        variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'Dashboard',              condition: 'Button: Capture Now',      created: '22 Jun 2026, 09:48' },
+      { name: 'Accept part to PLC',       type: 'Write To PLC',         variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Dashboard',              condition: 'Button: Accept Part',      created: '22 Jun 2026, 10:02' },
+      { name: 'Variant selector',         type: 'Change Variant',       variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'Dashboard',              condition: 'Dropdown: Select Variant', created: '23 Jun 2026, 13:19' },
+      { name: 'Refresh dashboard view',   type: 'Dashboard Refresh',    variant: '—',                 instance: 'Line-C Assembly',       source: 'Dashboard',              condition: 'Button: Refresh View',     created: '24 Jun 2026, 17:55' },
+      { name: 'Show part details popup',  type: 'Open Popup',           variant: '—',                 instance: 'Line-A Cap Inspection', source: 'Dashboard',              condition: 'Button: Show Details',     created: '25 Jun 2026, 12:03' },
     ];
 
     const sourceStyle = {
@@ -174,27 +181,49 @@
 
     const tbody = document.getElementById('tbody');
     const countBadge = document.getElementById('countBadge');
+    const typeFilter = document.getElementById('typeFilter');
+    const variantFilter = document.getElementById('variantFilter');
+    const instanceFilter = document.getElementById('instanceFilter');
     const sourceFilter = document.getElementById('sourceFilter');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // populate dynamic filter options from data
+    const uniq = (key) => [...new Set(rows.map(r => r[key]).filter(v => v && v !== '—'))].sort();
+    uniq('type').forEach(v => typeFilter.add(new Option(v, v)));
+    uniq('variant').forEach(v => variantFilter.add(new Option(v, v)));
+    uniq('instance').forEach(v => instanceFilter.add(new Option(v, v)));
 
     function render() {
-      const f = sourceFilter.value;
-      const filtered = rows.filter(r => !f || r.source === f);
+      const t = typeFilter.value, vr = variantFilter.value, ins = instanceFilter.value, src = sourceFilter.value;
+      const filtered = rows.filter(r =>
+        (!t || r.type === t) &&
+        (!vr || r.variant === vr) &&
+        (!ins || r.instance === ins) &&
+        (!src || r.source === src)
+      );
       tbody.innerHTML = filtered.map(r => `
         <tr class="hover:bg-gray-100">
-          <td class="px-2 py-3 text-black"><div class="flex h-full w-full items-center justify-center text-center font-medium">${r.action}</div></td>
-          <td class="px-2 py-3 text-black"><div class="flex h-full w-full items-center justify-center text-center">${r.variant}</div></td>
-          <td class="px-2 py-3 text-black"><div class="flex h-full w-full items-center justify-center text-center"><span class="rounded px-2 py-0.5 text-xs font-medium ${sourceStyle[r.source]}">${r.source}</span></div></td>
-          <td class="px-2 py-3 text-black"><div class="flex h-full w-full items-center justify-center text-center text-sm text-f-dark-gray">${r.condition}</div></td>
-          <td class="px-2 py-3 text-black"><div class="flex h-full w-full items-center justify-center text-center"><a href="#" class="text-sm font-medium text-blue-600 hover:underline">View Action</a></div></td>
+          <td class="px-3 py-3 text-black"><div class="flex items-center justify-center text-center font-medium">${r.name}</div></td>
+          <td class="px-3 py-3 text-black"><div class="flex items-center justify-center text-center">${r.type}</div></td>
+          <td class="px-3 py-3 text-black"><div class="flex items-center justify-center text-center">${r.variant}</div></td>
+          <td class="px-3 py-3 text-black"><div class="flex items-center justify-center text-center">${r.instance}</div></td>
+          <td class="px-3 py-3 text-black"><div class="flex items-center justify-center text-center"><span class="whitespace-nowrap rounded px-2 py-0.5 text-xs font-medium ${sourceStyle[r.source]}">${r.source}</span></div></td>
+          <td class="px-3 py-3 text-black"><div class="flex items-center justify-center text-center text-sm text-f-dark-gray">${r.condition}</div></td>
+          <td class="px-3 py-3 text-black"><div class="flex items-center justify-center whitespace-nowrap text-center text-sm text-f-dark-gray">${r.created}</div></td>
+          <td class="px-3 py-3 text-black"><div class="flex items-center justify-center text-center"><a href="#" class="text-sm font-medium text-blue-600 hover:underline">View Action</a></div></td>
         </tr>
       `).join('');
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="bg-white py-6 text-center text-[16px] font-normal text-gray-600">No actions found</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="bg-white py-6 text-center text-[16px] font-normal text-gray-600">No actions found</td></tr>`;
       }
       countBadge.textContent = filtered.length;
     }
 
-    sourceFilter.addEventListener('change', render);
+    [typeFilter, variantFilter, instanceFilter, sourceFilter].forEach(el => el.addEventListener('change', render));
+    clearBtn.addEventListener('click', () => {
+      typeFilter.value = ''; variantFilter.value = ''; instanceFilter.value = ''; sourceFilter.value = '';
+      render();
+    });
     render();
   </script>
 </body>
