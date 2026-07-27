@@ -156,21 +156,21 @@
 
   <script>
     const rows = [
-      { name: 'Capture front on trigger', type: 'Trigger Image',       variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 100 == 1',        created: '12 Jun 2026, 10:24' },
-      { name: 'Switch to rear recipe',    type: 'Change Variant',       variant: 'Variant 2 - Rear',  instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 104 == 2',        created: '12 Jun 2026, 10:31' },
-      { name: 'Ack to PLC coil',          type: 'Write To PLC',         variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Coil 12 == True',          created: '14 Jun 2026, 09:05' },
-      { name: 'Update side GT',           type: 'Change Ground Truth',  variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'PLC Read Config',        condition: 'Register 210 > 50',        created: '15 Jun 2026, 16:42' },
-      { name: 'Log read to DB',           type: 'Write To DB',          variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 100 == 1',        created: '15 Jun 2026, 16:50' },
-      { name: 'Retrigger on NG',          type: 'Trigger Image',        variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Verdict == NG',            created: '18 Jun 2026, 11:12' },
-      { name: 'Bump GT on defects',       type: 'Change Ground Truth',  variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Defect Count >= 3',        created: '18 Jun 2026, 11:20' },
-      { name: 'Persist OK result',        type: 'Write To DB',          variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'Internal Action Config', condition: 'Verdict == OK',            created: '19 Jun 2026, 08:33' },
-      { name: 'Operator override flip',   type: 'Reverse Judgement',    variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'Internal Action Config', condition: 'Operator Override == True',created: '20 Jun 2026, 14:07' },
-      { name: 'Flush captures on end',    type: 'Clear Captures',       variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Cycle End == True',        created: '20 Jun 2026, 14:15' },
-      { name: 'Manual capture button',    type: 'Trigger Image',        variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'Dashboard',              condition: 'Button: Capture Now',      created: '22 Jun 2026, 09:48' },
-      { name: 'Accept part to PLC',       type: 'Write To PLC',         variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Dashboard',              condition: 'Button: Accept Part',      created: '22 Jun 2026, 10:02' },
-      { name: 'Variant selector',         type: 'Change Variant',       variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'Dashboard',              condition: 'Dropdown: Select Variant', created: '23 Jun 2026, 13:19' },
-      { name: 'Refresh dashboard view',   type: 'Dashboard Refresh',    variant: '—',                 instance: 'Line-C Assembly',       source: 'Dashboard',              condition: 'Button: Refresh View',     created: '24 Jun 2026, 17:55' },
-      { name: 'Show part details popup',  type: 'Open Popup',           variant: '—',                 instance: 'Line-A Cap Inspection', source: 'Dashboard',              condition: 'Button: Show Details',     created: '25 Jun 2026, 12:03' },
+      { name: 'TI_1',   type: 'Trigger Image',       variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 100 == 1',        created: '12 Jun 2026, 10:24' },
+      { name: 'CV_1',   type: 'Change Variant',       variant: 'Variant 2 - Rear',  instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 104 == 2',        created: '12 Jun 2026, 10:31' },
+      { name: 'WTP_1',  type: 'Write To PLC',         variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Coil 12 == True',          created: '14 Jun 2026, 09:05' },
+      { name: 'CGT_1',  type: 'Change Ground Truth',  variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'PLC Read Config',        condition: 'Register 210 > 50',        created: '15 Jun 2026, 16:42' },
+      { name: 'WTD_1',  type: 'Write To DB',          variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'PLC Read Config',        condition: 'Register 100 == 1',        created: '15 Jun 2026, 16:50' },
+      { name: 'TI_2',   type: 'Trigger Image',        variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Verdict == NG',            created: '18 Jun 2026, 11:12' },
+      { name: 'CGT_2',  type: 'Change Ground Truth',  variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Defect Count >= 3',        created: '18 Jun 2026, 11:20' },
+      { name: 'WTD_2',  type: 'Write To DB',          variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'Internal Action Config', condition: 'Verdict == OK',            created: '19 Jun 2026, 08:33' },
+      { name: 'RJ_1',   type: 'Reverse Judgement',    variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'Internal Action Config', condition: 'Operator Override == True',created: '20 Jun 2026, 14:07' },
+      { name: 'CC_1',   type: 'Clear Captures',       variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Internal Action Config', condition: 'Cycle End == True',        created: '20 Jun 2026, 14:15' },
+      { name: 'TI_3',   type: 'Trigger Image',        variant: 'Variant 1 - Front', instance: 'Line-A Cap Inspection', source: 'Dashboard',              condition: 'Button: Capture Now',      created: '22 Jun 2026, 09:48' },
+      { name: 'WTP_2',  type: 'Write To PLC',         variant: 'Variant 2 - Rear',  instance: 'Line-B Weld Bead',      source: 'Dashboard',              condition: 'Button: Accept Part',      created: '22 Jun 2026, 10:02' },
+      { name: 'CV_2',   type: 'Change Variant',       variant: 'Variant 3 - Side',  instance: 'Line-C Assembly',       source: 'Dashboard',              condition: 'Dropdown: Select Variant', created: '23 Jun 2026, 13:19' },
+      { name: 'DR_1',   type: 'Dashboard Refresh',    variant: '—',                 instance: 'Line-C Assembly',       source: 'Dashboard',              condition: 'Button: Refresh View',     created: '24 Jun 2026, 17:55' },
+      { name: 'OP_1',   type: 'Open Popup',           variant: '—',                 instance: 'Line-A Cap Inspection', source: 'Dashboard',              condition: 'Button: Show Details',     created: '25 Jun 2026, 12:03' },
     ];
 
     const sourceStyle = {
